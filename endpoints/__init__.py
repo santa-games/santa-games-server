@@ -6,3 +6,4 @@ api_blueprint = Blueprint("api", __name__, url_prefix='/api')
 api = Api(api_blueprint, errors=errors)
 
 from . import users
+from . import games
