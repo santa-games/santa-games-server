@@ -41,7 +41,7 @@ class Games(Resource):
             return game, 201
         except Exception as e:
             logger.error(e)
-            abort(500)
+            abort(500, e.message)
 
 game_get_fields = {
     "game_id" : fields.Integer(attribute="id"),
