@@ -1,7 +1,7 @@
 from . import tic_tac_toe
 
 game_types = {
-    "tic_tac_toe": tic_tac_toe
+    "tictactoe": tic_tac_toe
 }
 
 STATE_PROPOSED = 0
