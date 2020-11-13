@@ -1,5 +1,6 @@
 import logging, os, json, logging, math, urllib, uuid, datetime, random
 from flask import Flask, escape, jsonify, request, abort, g
+from flask_cors import CORS
 from models import User
 from extensions import db, auth
 from endpoints import api_blueprint
@@ -11,6 +12,7 @@ logger.info("Welcome to Santa-Games")
 DB_CONNECTION = os.environ.get("SANTA_GAMES_SQLALCHEMY_DATABASE_URI")
 
 app = Flask(__name__)
+CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_CONNECTION
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)

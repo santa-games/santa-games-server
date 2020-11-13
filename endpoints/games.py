@@ -139,6 +139,7 @@ class Turns(Resource):
         data, next_player_id, win_player_id = game_type.turn(game.data, player_id, player_action)
 
         if data is not None: game.data = data
+        else: return abort(400, "Invalid move.")
 
         if win_player_id is not None:
             game.game_state_id = STATE_COMPLETE
@@ -146,6 +147,7 @@ class Turns(Resource):
             game.win_user_id = convert_player_id(game, win_player_id)
         else:
             game.next_user_id = convert_player_id(game, next_player_id)
+
         db.session.commit()
 
 def convert_player_id(game, player_id):
