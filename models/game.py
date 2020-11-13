@@ -10,5 +10,6 @@ class Game(db.Model):
     host_goes_first = db.Column(db.Boolean)
     game_state_id = db.Column(db.Integer)
     next_user_id = db.Column(db.Integer)
+    win_user_id = db.Column(db.Integer)
     next_turn_expiry = db.Column(db.DateTime)
     data = db.Column(db.String)
