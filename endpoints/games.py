@@ -38,13 +38,13 @@ class Games(Resource):
             query = models.Game.query
 
             next_user_id = request.args.get('next_user_id')
-            if next_user_id is not None: query.filter_by(next_user_id=next_user_id)
+            if next_user_id is not None: query = query.filter_by(next_user_id=next_user_id)
 
             game_state_id = request.args.get('game_state_id')
-            if game_state_id is not None: query.filter_by(game_state_id=game_state_id)
+            if game_state_id is not None: query = query.filter_by(game_state_id=game_state_id)
 
             win_user_id = request.args.get('win_user_id')
-            if win_user_id is not None: query.filter_by(game_state_id=game_state_id)
+            if win_user_id is not None: query = query.filter_by(game_state_id=game_state_id)
 
             games = query.all()
             return games, 200
