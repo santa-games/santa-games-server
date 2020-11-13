@@ -13,17 +13,40 @@ games_get_fields = {
     "game_state_id" : fields.Integer(),
     "host_user_id" : fields.Integer(),
     "guest_user_id" : fields.Integer(default=None),
+    "next_user_id" : fields.Integer(default=None),
+    "win_user_id" : fields.Integer(default=None),
 }
 
 games_post_fields = {
     "game_id" : fields.Integer(attribute="id"),
 }
 
+game_get_fields = {
+    "game_id" : fields.Integer(attribute="id"),
+    "game_state_id" : fields.Integer(),
+    "host_user_id" : fields.Integer(),
+    "guest_user_id" : fields.Integer(default=None),
+    "next_user_id" : fields.Integer(default=None),
+    "win_user_id" : fields.Integer(default=None),
+    "data" : fields.String(),
+}
+
 class Games(Resource):
     @marshal_with(games_get_fields)
     def get(self):
         try:
-            games = models.Game.query.all()
+            query = models.Game.query
+
+            next_user_id = request.args.get('next_user_id')
+            if next_user_id is not None: query.filter_by(next_user_id=next_user_id)
+
+            game_state_id = request.args.get('game_state_id')
+            if game_state_id is not None: query.filter_by(game_state_id=game_state_id)
+
+            win_user_id = request.args.get('win_user_id')
+            if win_user_id is not None: query.filter_by(game_state_id=game_state_id)
+
+            games = query.all()
             return games, 200
         except Exception as e:
             abort(500, str(e))
