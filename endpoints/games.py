@@ -66,11 +66,17 @@ class Games(Resource):
             logger.error(e)
             abort(500, e)
 
+user_fields = {
+    "user_id" : fields.Integer(attribute="id"),
+    "user_name" : fields.String(),
+}
 game_get_fields = {
     "game_id" : fields.Integer(attribute="id"),
     "game_state_id" : fields.Integer(),
     "host_user_id" : fields.Integer(),
+    "host_user_name" : fields.String(),
     "guest_user_id" : fields.Integer(default=None),
+    "guest_user_name" : fields.String(default=None),
     "next_user_id" : fields.Integer(default=None),
     "win_user_id" : fields.Integer(default=None),
     "number_of_turns" : fields.Integer(),
@@ -83,8 +89,16 @@ class Game(Resource):
         if game_id is None: abort(400, "Must provide a game_id")
 
         game = models.Game.query.filter_by(id=game_id).first()
-        if game is None:
-            return abort(400, f"The provided game_id [{game_id}] was not found in the database.")
+        if game is None: return abort(400, f"The provided game_id [{game_id}] was not found in the database.")
+
+        host_user = models.User.query.filter_by(id=game.host_user_id).first()
+        if host_user is None: logger.debug("The host isn't in the database...")
+        else: game.host_user_name = host_user.user_name
+
+        if game.guest_user_id:
+            guest_user = models.User.query.filter_by(id=game.guest_user_id).first()
+            if guest_user is None: logger.debug("The guest isn't in the database...")
+            else: game.guest_user_name = guest_user.user_name
 
         return game, 200
 
