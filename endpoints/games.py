@@ -55,14 +55,14 @@ class Games(Resource):
             limit = request.args.get('limit')
             if limit is not None:
                 limit = int(limit) if limit.isdigit() else None
-                if limit is None: return abort(400, "limit must be a number"
+                if limit is None: return abort(400, "limit must be a number")
                 query = query.limit(limit)
 
             offset = request.args.get('offset')
             if offset is not None:
                 offset = int(offset) if offset.isdigit() else None
-                if offset is None: return abort(400, "offset must be a number"
-                query = query.limit(offset)
+                if offset is None: return abort(400, "offset must be a number")
+                query = query.offset(offset)
 
             games = query.all()
             return games, 200
