@@ -52,6 +52,18 @@ class Games(Resource):
             win_user_id = request.args.get('win_user_id')
             if win_user_id is not None: query = query.filter_by(game_state_id=game_state_id)
 
+            limit = request.args.get('limit')
+            if limit is not None:
+                limit = int(limit) if limit.isdigit() else None
+                if limit is None: return abort(400, "limit must be a number"
+                query = query.limit(limit)
+
+            offset = request.args.get('offset')
+            if offset is not None:
+                offset = int(offset) if offset.isdigit() else None
+                if offset is None: return abort(400, "offset must be a number"
+                query = query.limit(offset)
+
             games = query.all()
             return games, 200
         except Exception as e:
@@ -147,21 +159,21 @@ class Turns(Resource):
 
         game.number_of_turns = game.number_of_turns + 1
 
-        if win_player_id is not None:
+        if next_player_id is None:
             game.game_state_id = STATE_COMPLETE
             game.next_user_id = None
-            game.win_user_id = convert_player_id(game, win_player_id)
-            
-            win_user = models.User.query.filter_by(id=game.win_user_id).first()
-            if win_user is None: logger.debug("Can't find the winner in the database.")
-            else: win_user.games_won = win_user.games_won + 1      
 
-            lose_user_id = game.host_user_id if game.host_user_id != game.win_user_id else game.guest_user_id
-            lose_user = models.User.query.filter_by(id=game.lose_user_id).first()
-            if lose_user is None: logger.debug("Can't find the loser in the database.")
-            else: lose_user.games_lost = lose_user.games_lost + 1
+            if win_player_id is not None:
+                game.win_user_id = convert_player_id(game, win_player_id)
+                
+                win_user = models.User.query.filter_by(id=game.win_user_id).first()
+                if win_user is None: logger.debug("Can't find the winner in the database.")
+                else: win_user.games_won = win_user.games_won + 1      
 
-
+                lose_user_id = game.host_user_id if game.host_user_id != game.win_user_id else game.guest_user_id
+                lose_user = models.User.query.filter_by(id=lose_user_id).first()
+                if lose_user is None: logger.debug("Can't find the loser in the database.")
+                else: lose_user.games_lost = lose_user.games_lost + 1
         else:
             game.next_user_id = convert_player_id(game, next_player_id)
 
