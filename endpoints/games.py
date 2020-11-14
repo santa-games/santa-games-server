@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 games_get_fields = {
     "game_id" : fields.Integer(attribute="id"),
+    "datetime_created" : fields.DateTime(),
     "game_state_id" : fields.Integer(),
     "host_user_id" : fields.Integer(),
     "guest_user_id" : fields.Integer(default=None),
@@ -23,11 +24,15 @@ games_post_fields = {
 
 game_get_fields = {
     "game_id" : fields.Integer(attribute="id"),
+    "datetime_created" : fields.DateTime(),
     "game_state_id" : fields.Integer(),
     "host_user_id" : fields.Integer(),
+    "host_user_name" : fields.String(),
     "guest_user_id" : fields.Integer(default=None),
+    "guest_user_name" : fields.String(default=None),
     "next_user_id" : fields.Integer(default=None),
     "win_user_id" : fields.Integer(default=None),
+    "number_of_turns" : fields.Integer(),
     "data" : fields.String(),
 }
 
@@ -65,23 +70,6 @@ class Games(Resource):
         except Exception as e:
             logger.error(e)
             abort(500, e)
-
-user_fields = {
-    "user_id" : fields.Integer(attribute="id"),
-    "user_name" : fields.String(),
-}
-game_get_fields = {
-    "game_id" : fields.Integer(attribute="id"),
-    "game_state_id" : fields.Integer(),
-    "host_user_id" : fields.Integer(),
-    "host_user_name" : fields.String(),
-    "guest_user_id" : fields.Integer(default=None),
-    "guest_user_name" : fields.String(default=None),
-    "next_user_id" : fields.Integer(default=None),
-    "win_user_id" : fields.Integer(default=None),
-    "number_of_turns" : fields.Integer(),
-    "data" : fields.String(),
-}
 
 class Game(Resource):
     @marshal_with(game_get_fields)
