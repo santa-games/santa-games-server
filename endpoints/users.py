@@ -10,6 +10,8 @@ logger = logging.getLogger(__name__)
 users_fields = {
     "user_id" : fields.Integer(attribute="id"),
     "user_name" : fields.String,
+    "games_won" : fields.Integer,
+    "games_lost" : fields.Integer,
 }
 
 user_register_fields = {
@@ -21,6 +23,8 @@ user_register_fields = {
 user_fields = {
     "user_id" : fields.Integer(attribute="id"),
     "user_name" : fields.String,
+    "games_won" : fields.Integer,
+    "games_lost" : fields.Integer,
 }
 
 class Users(Resource):

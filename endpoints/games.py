@@ -151,6 +151,17 @@ class Turns(Resource):
             game.game_state_id = STATE_COMPLETE
             game.next_user_id = None
             game.win_user_id = convert_player_id(game, win_player_id)
+            
+            win_user = models.User.query.filter_by(id=game.win_user_id).first()
+            if win_user is None: logger.debug("Can't find the winner in the database.")
+            else: win_user.games_won = win_user.games_won + 1      
+
+            lose_user_id = game.host_user_id if game.host_user_id != game.win_user_id else game.guest_user_id
+            lose_user = models.User.query.filter_by(id=game.lose_user_id).first()
+            if lose_user is None: logger.debug("Can't find the loser in the database.")
+            else: lose_user.games_lost = lose_user.games_lost + 1
+
+
         else:
             game.next_user_id = convert_player_id(game, next_player_id)
 
