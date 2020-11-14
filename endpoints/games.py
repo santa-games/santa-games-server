@@ -30,6 +30,7 @@ game_get_fields = {
     "host_user_name" : fields.String(),
     "guest_user_id" : fields.Integer(default=None),
     "guest_user_name" : fields.String(default=None),
+    "host_plays_first" : fields.Boolean(attribute="host_goes_first", default=None),
     "next_user_id" : fields.Integer(default=None),
     "win_user_id" : fields.Integer(default=None),
     "number_of_turns" : fields.Integer(),
