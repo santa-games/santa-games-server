@@ -11,5 +11,6 @@ class Game(db.Model):
     game_state_id = db.Column(db.Integer)
     next_user_id = db.Column(db.Integer)
     win_user_id = db.Column(db.Integer)
+    number_of_turns = db.Column(db.Integer, nullable=False, default=0)
     next_turn_expiry = db.Column(db.DateTime)
     data = db.Column(db.String)

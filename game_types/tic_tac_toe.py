@@ -12,25 +12,25 @@ options = [
 def create():
     return "         "
 
-def turn(current_game_state, player_id, player_action):
+def turn(game_data, player_id, player_action):
     index = int(player_action)
     
     # check if its a valid move
-    if current_game_state[index] != ' ':
+    if game_data[index] != ' ':
         return None, None, None
     
     # get next game state
     player_char = 'O' if player_id == 0 else 'X'
-    next_game_state = current_game_state[:index] + player_char + current_game_state[index+1:]
+    next_game_data = game_data[:index] + player_char + game_data[index+1:]
 
     # work out the next player
-    if next((i for i, c in enumerate(game_data) if c == ' '), None) is None: next_player_id = None
+    if next((i for i, c in enumerate(next_game_data) if c == ' '), None) is None: next_player_id = None
     else: next_player_id = (player_id + 1) % 2
 
     # work out if a player has won
-    win_player_id = find_winning_player(next_game_state)
+    win_player_id = find_winning_player(next_game_data)
 
-    return next_game_state, next_player_id, win_player_id
+    return next_game_data, next_player_id, win_player_id
 
 def find_winning_player(game_data):
     for option in options:

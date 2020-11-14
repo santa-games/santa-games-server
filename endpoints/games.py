@@ -73,6 +73,7 @@ game_get_fields = {
     "guest_user_id" : fields.Integer(default=None),
     "next_user_id" : fields.Integer(default=None),
     "win_user_id" : fields.Integer(default=None),
+    "number_of_turns" : fields.Integer(),
     "data" : fields.String(),
 }
 
@@ -140,6 +141,8 @@ class Turns(Resource):
 
         if data is not None: game.data = data
         else: return abort(400, "Invalid move.")
+
+        game.number_of_turns = game.number_of_turns + 1
 
         if win_player_id is not None:
             game.game_state_id = STATE_COMPLETE
