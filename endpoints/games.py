@@ -72,11 +72,15 @@ class Games(Resource):
     @auth.login_required
     @marshal_with(games_post_fields)
     def post(self):
-        game_type_id = request.json.get('game_type_id')
-        if game_type_id is None: abort(400, "No [game_type_id] provided.")        
-        if game_type_id not in game_types.keys(): abort(400, f"[game_type_id] of [{game_type_id}] not a supported game.")
         try:
-            game = models.Game(host_user_id=g.current_user.id, game_type_id=game_type_id, datetime_created=datetime.datetime.now(), game_state_id=0) 
+            game_type_id = request.json.get('game_type_id')
+            if game_type_id is None: abort(400, "No [game_type_id] provided.")        
+
+            game_type_id = int(game_type_id) if game_type_id.isdigit() else None
+            if game_type_id is None: abort(400, "[game_type_id] must be an integer.")        
+
+            if game_type_id < 0 or game_type_id >= len(game_types): abort(400, f"[game_type_id] of [{game_type_id}] not a supported game.")
+            game = models.Game(host_user_id=g.current_user.id, game_type_id=str(game_type_id), datetime_created=datetime.datetime.now(), game_state_id=0) 
             db.session.add(game)
             db.session.commit()
             return game, 201
@@ -151,7 +155,9 @@ class Turns(Resource):
         if game.host_goes_first: player_id = 0 if game.next_user_id == game.host_user_id else 1
         else: player_id = 1 if game.next_user_id == game.host_user_id else 0
 
-        game_type = game_types[game.game_type_id]
+        game_type = game_types.get(game.game_type_id)
+        if game_type is None: return abort(400, "Couldn't find the game type...")
+
         data, next_player_id, win_player_id = game_type.turn(game.data, player_id, player_action)
 
         if data is not None: game.data = data

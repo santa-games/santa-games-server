@@ -9,6 +9,8 @@ options = [
     [2, 4, 6],
 ]
 
+name = "tic-tac-toe"
+
 def create():
     return "         "
 
@@ -25,7 +27,6 @@ def turn(game_data, player_id, player_action):
 
     # work out the next player
     next_free_space = next((i for i, c in enumerate(next_game_data) if c == ' '), None)
-    print(f"Next free spot is [{next_free_space}]")
     if next_free_space is None: next_player_id = None
     else: next_player_id = (player_id + 1) % 2
 

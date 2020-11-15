@@ -1,8 +1,10 @@
 from . import tic_tac_toe
+from . import connect_4
 
-game_types = {
-    "tictactoe": tic_tac_toe
-}
+game_types = { str(i) : game_type for (i, game_type) in enumerate((
+    tic_tac_toe,
+    connect_4,
+))}
 
 STATE_PROPOSED = 0
 STATE_ACTIVE = 1
