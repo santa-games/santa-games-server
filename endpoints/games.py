@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 games_get_fields = {
     "game_id" : fields.Integer(attribute="id"),
     "datetime_created" : fields.DateTime(),
+    "game_type_id" : fields.Integer(),
     "game_state_id" : fields.Integer(),
     "host_user_id" : fields.Integer(),
     "guest_user_id" : fields.Integer(default=None),
@@ -25,6 +26,7 @@ games_post_fields = {
 game_get_fields = {
     "game_id" : fields.Integer(attribute="id"),
     "datetime_created" : fields.DateTime(),
+    "game_type_id" : fields.Integer(),
     "game_state_id" : fields.Integer(),
     "host_user_id" : fields.Integer(),
     "host_user_name" : fields.String(),
