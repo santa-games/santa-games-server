@@ -25,13 +25,16 @@ def turn(game_data, player_id, player_action):
     player_char = 'O' if player_id == 0 else 'X'
     next_game_data = game_data[:index] + player_char + game_data[index+1:]
 
-    # work out the next player
-    next_free_space = next((i for i, c in enumerate(next_game_data) if c == ' '), None)
-    if next_free_space is None: next_player_id = None
-    else: next_player_id = (player_id + 1) % 2
-
     # work out if a player has won
     win_player_id = check_for_winner(next_game_data)
+
+    # work out the next player
+    if win_player_id is None:
+        next_free_space = next((i for i, c in enumerate(next_game_data) if c == ' '), None)
+        if next_free_space is None: next_player_id = None
+        else: next_player_id = (player_id + 1) % 2
+    else:
+        next_player_id = None
 
     return next_game_data, next_player_id, win_player_id
 
