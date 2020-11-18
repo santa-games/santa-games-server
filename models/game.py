@@ -6,7 +6,7 @@ class Game(db.Model):
     datetime_created = db.Column(db.DateTime, nullable=False)
     host_user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     guest_user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True, default=None)
-    game_type_id = db.Column(db.String, nullable=False)
+    game_type_id = db.Column(db.Integer, nullable=False)
     host_goes_first = db.Column(db.Boolean)
     game_state_id = db.Column(db.Integer)
     next_user_id = db.Column(db.Integer)

@@ -130,7 +130,7 @@ class Game(Resource):
         elif g.current_user.id != game.host_user_id and game.game_state_id == STATE_PROPOSED and game_state_id == STATE_ACTIVE:
                 game.game_state_id = STATE_ACTIVE
                 game.guest_user_id = g.current_user.id
-                game_type = game_types[game.game_type_id]
+                game_type = game_types[str(game.game_type_id)]
                 game.data = game_type.create()
                 game.host_goes_first = random.choice([True, False])
                 game.next_user_id = game.host_user_id if game.host_goes_first else game.guest_user_id
@@ -157,10 +157,11 @@ class Turns(Resource):
         if game.host_goes_first: player_id = 0 if game.next_user_id == game.host_user_id else 1
         else: player_id = 1 if game.next_user_id == game.host_user_id else 0
 
-        game_type = game_types.get(game.game_type_id)
+        game_type = game_types.get(str(game.game_type_id))
         if game_type is None: return abort(400, "Couldn't find the game type...")
 
         data, next_player_id, win_player_id = game_type.turn(game.data, player_id, player_action)
+        print(data)
 
         if data is not None: game.data = data
         else: return abort(400, "Invalid move.")

@@ -31,11 +31,11 @@ def turn(game_data, player_id, player_action):
     else: next_player_id = (player_id + 1) % 2
 
     # work out if a player has won
-    win_player_id = find_winning_player(next_game_data)
+    win_player_id = check_for_winner(next_game_data)
 
     return next_game_data, next_player_id, win_player_id
 
-def find_winning_player(game_data):
+def check_for_winner(game_data):
     for option in options:
         player_icon = game_data[option[0]]
         if player_icon == ' ':
