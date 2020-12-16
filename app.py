@@ -4,8 +4,13 @@ from flask_cors import CORS
 from models import User
 from extensions import db, auth
 from endpoints import api_blueprint
+from rich import pretty
+from rich.logging import RichHandler
 
-logging.basicConfig(level=logging.INFO)
+pretty.install()
+
+FORMAT = "%(message)s"
+logging.basicConfig(level="NOTSET", format=FORMAT, datefmt="[%X]", handlers=[RichHandler(rich_tracebacks=True)])
 logger = logging.getLogger("santa-games")
 logger.info("Welcome to Santa-Games")
 

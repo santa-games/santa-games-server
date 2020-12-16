@@ -174,15 +174,25 @@ class Turns(Resource):
 
             if win_player_id is not None:
                 game.win_user_id = convert_player_id(game, win_player_id)
-                
-                win_user = models.User.query.filter_by(id=game.win_user_id).first()
-                if win_user is None: logger.debug("Can't find the winner in the database.")
-                else: win_user.games_won = win_user.games_won + 1      
 
+                win_user = models.User.query.filter_by(id=game.win_user_id).first()
                 lose_user_id = game.host_user_id if game.host_user_id != game.win_user_id else game.guest_user_id
                 lose_user = models.User.query.filter_by(id=lose_user_id).first()
-                if lose_user is None: logger.debug("Can't find the loser in the database.")
-                else: lose_user.games_lost = lose_user.games_lost + 1
+
+                if win_user is None or lose_user: logger.debug("Can't find the winner or loser in the database.")
+                else:
+                    win_user.games_won = win_user.games_won + 1      
+                    lose_user.games_lost = lose_user.games_lost + 1
+                        
+                    q_win = pow(10, win_user.rank / 400)
+                    q_lose = pow(10, lose_user.rank / 400)
+                    win_a = q_win / (q_win + q_lose)
+                    lose_a = q_win / (q_win + q_lose)
+                    k = 32
+
+                    win_rank = win_user.rank + k * (1 - win_a)
+                    lost_rank = lose_user.rank + k * (1 - lose_a)
+
         else:
             game.next_user_id = convert_player_id(game, next_player_id)
 
